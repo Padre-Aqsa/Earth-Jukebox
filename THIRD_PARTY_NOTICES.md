@@ -22,5 +22,5 @@ Copyright Photopea. MIT License. Source: https://github.com/photopea/UTIF.js
 ## Atkinson Hyperlegible (Google Fonts)
 Braille Institute of America. SIL Open Font License 1.1.
 
-## Not used
-Nothing is listed here at the moment. The team must confirm that no code, data or concept from another participant's repository is used; anything that is used must be listed here with its author, link and license.
+## Other people's work
+No code or concept from other participants' repositories is used.
