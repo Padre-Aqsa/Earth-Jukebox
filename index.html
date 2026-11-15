@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Earth Jukebox – Hear NASA’s Earth Information Center</title>
+<meta name="description" content="Earth Jukebox turns NASA Earth Information Center frames (night lights, sea surface temperature, lightning) into sound, graphs, tables and a 3D coil, with full voice and keyboard accessibility.">
+<meta name="date" content="2026-11-14">
+<meta name="created" content="2026-11-14">
+<meta name="generator" content="Hand-written HTML, CSS and JavaScript (see AI disclosure on the page)">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#player">Skip to player</a>
+<header>
+  <div class="brand"><img class="brandlogo" src="assets/nasa-space-apps-challenge.png" alt="NASA Space Apps Challenge logo" width="96" height="96">
+  <div><h1>Earth Jukebox <small>NASA EIC Challenge</small></h1>
+  <p class="lead">Hear what NASA pictures of Earth show: colors and brightness become sound.</p></div></div>
+  <div class="tools" role="group" aria-label="Display and voice settings">
+    <button id="voice" aria-pressed="true">Voice guide: On</button>
+    <button id="contrast" aria-pressed="false">High contrast</button>
+    <button id="bigtext" aria-pressed="false">Larger text</button>
+    <button id="help">Keyboard help (?)</button>
+    <button id="creditsbtn" type="button">Credits &amp; AI disclosure</button>
+  </div>
+</header>
+<main>
+  <section class="howto" aria-label="How to use"><h2>How to use</h2><ol><li><strong>Choose</strong> one of the three datasets.</li><li><strong>Upload</strong> a video, or as many pictures as you like (JPG, PNG or PDF).</li><li><strong>Press Play.</strong> The yellow line reads the picture and turns its colors and brightness into sound.</li></ol></section>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="n">1</span>Choose a dataset, then upload your video or image</h2>
+    <div id="gallery" role="radiogroup" aria-label="Datasets"></div>
+    <div id="legend" class="legend"></div>
+    <div class="upload">
+      <p id="uptitle" class="dsdesc">Select one of the three datasets above, then upload your data.</p>
+      <label class="file">Upload a video, JPG, PNG or PDF. No limit on the number of pictures: several images (or the pages of a PDF) are read as a time series
+        <input id="upfile" type="file" accept="video/*,image/*,application/pdf,.pdf,.tif,.tiff,.mov,.mkv" multiple disabled></label>
+      <progress id="upprog" max="1" value="0" hidden></progress>
+      <p id="upstatus" class="hint" aria-live="polite">No data uploaded yet.</p>
+      <button id="updel" type="button" hidden>Remove uploaded video or image</button>
+    </div>
+  </section>
+
+  <section id="player" aria-labelledby="s2" tabindex="-1" hidden>
+    <h2 id="s2"><span class="n">2</span>Visualization, audio and analysis</h2>
+    <div class="split">
+      <div>
+        <p id="dsdesc" class="dsdesc"></p>
+        <p id="dssrc" class="hint"></p>
+        <div id="views" class="views" role="radiogroup" aria-label="Video of this dataset" hidden></div>
+        <div class="stage">
+          <canvas id="cv" width="640" height="360" tabindex="0" role="img" aria-label="NASA frame. In explore mode, use arrow keys to move and hear values."></canvas>
+          <canvas id="geoov" width="640" height="360" aria-hidden="true"></canvas>
+          <div id="geoHandles" class="geo-handles" hidden aria-label="Country boundary resize handles">
+            <button type="button" data-edge="nw" aria-label="Resize from top-left corner" title="Resize top-left"></button>
+            <button type="button" data-edge="n" aria-label="Resize from top edge" title="Resize top"></button>
+            <button type="button" data-edge="ne" aria-label="Resize from top-right corner" title="Resize top-right"></button>
+            <button type="button" data-edge="e" aria-label="Resize from right edge" title="Resize right"></button>
+            <button type="button" data-edge="se" aria-label="Resize from bottom-right corner" title="Resize bottom-right"></button>
+            <button type="button" data-edge="s" aria-label="Resize from bottom edge" title="Resize bottom"></button>
+            <button type="button" data-edge="sw" aria-label="Resize from bottom-left corner" title="Resize bottom-left"></button>
+            <button type="button" data-edge="w" aria-label="Resize from left edge" title="Resize left"></button>
+          </div>
+          <div id="marker" aria-hidden="true"></div><div id="marker2" aria-hidden="true"></div>
+        </div>
+        <canvas id="prof" width="800" height="70" role="img" aria-label="Analysis profile: one bar per image column, filled by the scan line from left to right"></canvas>
+        <p id="scanout" class="hint"></p>
+        <p id="hearing" class="hearing">Hearing: –</p>
+        <div class="controls" role="group" aria-label="Playback controls">
+          <button id="prev" aria-label="Previous frame">⏮</button>
+          <button id="play" class="primary">▶ Play audio timeline</button>
+          <button id="stop">■ Stop</button>
+          <button id="next" aria-label="Next frame">⏭</button>
+        </div>
+        <div class="controls">
+          <label>Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1.0×</option><option value="1.5">1.5×</option><option value="2">2.0×</option></select></label>
+        </div>
+        <div class="sliders">
+          <label>Volume <input id="vol" type="range" min="0" max="1" step="0.05" value="0.6"></label>
+          <label>Frame <input id="frame" type="range" min="0" max="11" step="1" value="0"></label>
+        </div>
+        <div id="borderActions" class="border-actions" role="group" aria-label="Country border display and editing">
+          <button id="georim" class="border-toggle" type="button" aria-pressed="false">Show country borders on the picture</button>
+          <button id="geoedit" class="border-toggle" type="button" aria-pressed="false">Edit border alignment</button>
+        </div>
+        <div id="geoeditor" class="geo-editor" hidden>
+          <strong>World border alignment editor</strong>
+          <p class="hint">Edit mode lets you change the position and size of the country borders. Drag the middle of the map to move it; drag a handle on the left, right, top or bottom edge to change only that edge. Drag a corner handle to enlarge or shrink the borders in proportion. These settings belong to the selected dataset only.</p>
+          <div class="controls">
+            <button id="geoleft" type="button">← Move left</button><button id="georight" type="button">Move right →</button>
+            <button id="geoup" type="button">↑ Move up</button><button id="geodown" type="button">Move down ↓</button>
+          </div>
+          <div class="controls">
+            <button id="geosmaller" type="button">− Shrink borders</button><button id="geolarger" type="button">＋ Enlarge borders</button>
+            <button id="georeset" type="button">Reset</button>
+          </div>
+          <p class="hint">Extra border frames: each border frame is one complete set of country borders (like the first one). Use them when a picture holds more than one world map, or a map of a different size. A pixel is read with the newest border frame that covers it, and the results of all border frames are added together.</p>
+          <div class="controls">
+            <button id="geoaddframe" type="button">＋ Add border frame</button><button id="geodelframe" type="button">− Remove selected border frame</button>
+          </div>
+          <div id="geoframes" class="controls" role="group" aria-label="Choose border frame"></div>
+        </div>
+        <details class="more"><summary>More options</summary><div class="controls"><button id="test">🔔 Test sound</button>
+          <button id="audio" aria-pressed="true">Audio On</button>
+          <button id="how">ℹ How sound works</button>
+          <button id="explore" aria-pressed="false">Explore mode (E)</button>
+          <button id="tour">Judge tour (2 min)</button></div></details>
+        <p id="framedesc" class="frame"></p>
+        <p id="framenote" class="frame note" aria-label="What changed in this frame"></p>
+        <p id="dsinfo" class="hint"></p>
+      </div>
+      <div class="card">
+        <div class="metrics" role="group" aria-label="Current frame">
+          <div><small>TIMELINE</small><b id="mTime">–</b></div>
+          <div><small>MEASURED VALUE</small><b id="mVal">–</b><span id="mUnit" class="unit"></span></div>
+          <div><small>CHANGE VS PREVIOUS</small><b id="mDelta">–</b></div>
+          <div><small>ACOUSTIC PITCH</small><b id="mPitch">–</b></div>
+        </div>
+        <canvas id="curve" width="800" height="170" tabindex="0" role="slider" aria-label="Time curve. Use left and right arrows, click or drag to move through frames." aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"></canvas>
+        <div class="axis"><span id="axL"></span><span>Click or drag across the curve to scrub time and hear the pitch respond</span><span id="axR"></span></div>
+        <h3>AI conclusion (color and spectrum)</h3>
+        <p id="conclusion" class="conclusion"></p>
+        <div class="stats"><div><small>DOMINANT COLOR / SPECTRUM</small><p id="statcolor">–</p></div><div><small>ILLUMINATION DENSITY</small><p id="statlit">–</p></div></div>
+        <details class="more"><summary>More analysis tools</summary>
+          <details class="cmp"><summary>⚖ Compare two metrics (dual trajectory and correlation)</summary>
+          <label>Compare with <select id="cmpSel"></select></label>
+          <p id="cmpOut" class="hint" aria-live="polite"></p></details>
+          <div id="hzlegend" class="hz"></div>
+          <div class="mel"><h3>Series melody</h3><p id="melStats" class="hint"></p>
+          <button id="melody">♪ Play the whole series as a melody</button> <button id="dl">⬇ Download</button></div></details>
+        <details><summary>📊 View complete numerical data table (accessible format)</summary>
+          <div class="tblwrap"><table id="tbl"><caption class="sr">Measured value, change and pitch for every frame</caption>
+          <thead><tr><th>Frame</th><th>Measured value</th><th>Change vs previous</th><th>Key detail · color</th><th id="pitchh">Acoustic pitch</th></tr></thead><tbody id="tbody"></tbody></table></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="coilsec" aria-labelledby="s4" hidden>
+    <h2 id="s4"><span class="n">3</span>3D coil of the analysis</h2>
+    <p class="hint">Each ring is one frame. Its 32 points are the readings of the scan line (left to right). Farther from the center = higher value; the color follows the dataset: temperature for the ocean, brightness for night lights, dot count for lightning. Drag to turn it, click a ring to select that frame.</p>
+    <canvas id="coil" width="800" height="440" tabindex="0" role="img" aria-label="3D coil of the analysis"></canvas>
+    <div class="controls" role="group" aria-label="Playback controls (below the 3D coil)">
+      <button id="coilprev" aria-label="Previous frame">⏮</button>
+      <button id="coilplay" class="primary">▶ Play audio timeline</button>
+      <button id="coilstop">■ Stop</button>
+      <button id="coilnext" aria-label="Next frame">⏭</button>
+    </div>
+    <div class="controls"><button id="coilauto" aria-pressed="true">Auto-rotate</button><button id="coilreset">Reset view</button></div>
+  </section>
+
+  <section id="geosec" aria-labelledby="s6" hidden>
+    <h2 id="s6"><span class="n">4</span>Countries and continents</h2>
+    <p class="hint">See how the data is distributed by country and continent on the flat world map. Turn on the border display or edit mode with the controls under the volume and frame sliders.</p>
+    <p id="geostatus" class="hint" aria-live="polite">Country borders load when this panel is first used.</p>
+    <div id="geofile" hidden><label class="file">Load a country map file (GeoJSON or TopoJSON)<input id="geopick" type="file" accept=".json,.geojson,.topojson,application/json"></label></div>
+    <p id="geomsg" class="conclusion" hidden></p>
+    <div id="geomain">
+      <div class="controls" role="group" aria-label="Country table options">
+        <label>Frames <select id="geoscope"><option value="frame">This frame</option><option value="all">All frames together</option></select></label>
+        <label>Rows <select id="geotop"><option value="15">Top 15</option><option value="40">Top 40</option><option value="9999">All countries</option></select></label>
+        <button id="geocsv">⬇ Download all frames (.csv)</button>
+      </div>
+      <details class="more"><summary>Map area (change it when the borders do not fit your picture)</summary>
+        <p class="hint">The picture is read as a map from west to east and from south to north (degrees). Default: the whole world. If your map is cropped (for example it stops at 60° S), type its real edges, then turn on “Show country borders on the picture” to check the fit.</p>
+        <div class="geobox"><label>West <input id="gbw" type="number" value="-180" step="1"></label><label>East <input id="gbe" type="number" value="180" step="1"></label><label>South <input id="gbs" type="number" value="-90" step="1"></label><label>North <input id="gbn" type="number" value="90" step="1"></label></div>
+        <div class="controls"><button id="gbworld">Whole world</button><button id="gbaspect">Keep the picture’s shape, centered on the equator</button></div>
+      </details>
+      <p id="geosum" class="conclusion">–</p>
+      <h3 id="geoh3a">Continents</h3><div id="geocont" class="gbars"></div>
+      <h3 id="geoh3b">Countries</h3>
+      <div class="tblwrap"><table id="geobody"></table></div>
+      <p id="geomore" class="hint"></p>
+      <p id="geoinfo" class="hint"></p>
+    </div>
+  </section>
+
+  <section id="aboutsec" aria-labelledby="s5" hidden>
+    <h2 id="s5">About</h2>
+    <p>You upload a video (analyzed live while it plays) or any number of JPG/PNG images or PDF pages for one of the three datasets. Use flat world-map frames that match the NASA reference; globe, orbit, cropped regional and inset-heavy frames are not suitable for geographic attribution. Each frame is split into 32 columns and read pixel by pixel. Notes are snapped to a pentatonic scale so the result stays musical. The frames are real NASA SVS / EIC visualizations: Black Marble night lights, the ECCO2 ocean model and the ISS Lightning Imaging Sensor. To add more, see <code>docs/ADD_DATA.md</code>. Credit: NASA Scientific Visualization Studio.</p>
+    <details class="adv"><summary>Advanced: test any image with the pre-trained AI</summary>
+      <p id="aiStatus" class="hint"></p>
+      <label class="file">Analyze an image (JPG, PNG, WebP or TIFF)<input id="probe" type="file" accept="image/*,.tif,.tiff"></label>
+      <p id="aiResult" class="hint"></p>
+      <label><input type="checkbox" id="samples"> Show the built-in NASA sample frames (hidden by default; they stay in the project for AI training and testing)</label>
+    </details>
+  </section>
+</main>
+
+<dialog id="creditdlg" class="credits" aria-labelledby="creditsh">
+  <h2 id="creditsh">Credits, licenses and AI disclosure</h2>
+  <p class="hint">Earth Jukebox was created on 14 November 2026 for the NASA EIC Challenge. It is an independent project: it is not affiliated with, and not endorsed by, NASA or any other organization named below.</p>
+  <h3>Data and visualizations</h3>
+  <ul>
+    <li><strong>NASA Scientific Visualization Studio (SVS) and NASA Earth Information Center (EIC):</strong> the sample frames for Night Lights (NASA Black Marble), Sea Surface Currents &amp; Temperature (MIT/JPL ECCO2 ocean model) and Lightning (ISS Lightning Imaging Sensor) come from NASA visualizations. NASA content is generally not subject to copyright in the United States; NASA asks that it be acknowledged as the source and that nothing suggests NASA endorses this project. Credit line: <em>“NASA’s Scientific Visualization Studio”</em> and <em>“NASA Earth Information Center”</em>. Sources: <a href="https://svs.gsfc.nasa.gov/" rel="noopener">svs.gsfc.nasa.gov</a> · <a href="https://earth.gov/" rel="noopener">earth.gov</a>. NASA logos and insignia are not in the public domain and are not used here.</li>
+    <li><strong>Natural Earth</strong> (country borders, 1:110m and 1:50m): public-domain map data, “Made with Natural Earth. Free vector and raster map data at naturalearthdata.com.” Credit is not required but is given here. <a href="https://www.naturalearthdata.com/" rel="noopener">naturalearthdata.com</a></li>
+  </ul>
+  <h3>Software and fonts</h3>
+  <ul>
+    <li><strong>pdf.js</strong> 6.2.108 by the Mozilla Foundation, Apache License 2.0 (copy in <code>js/vendor</code>, license header kept). Used to read PDF uploads. <a href="https://mozilla.github.io/pdf.js/" rel="noopener">mozilla.github.io/pdf.js</a></li>
+    <li><strong>UTIF.js</strong> 3.1.0 by Photopea, MIT License. Used to read TIFF uploads; loaded from the jsDelivr CDN. <a href="https://github.com/photopea/UTIF.js" rel="noopener">github.com/photopea/UTIF.js</a></li>
+    <li><strong>Atkinson Hyperlegible</strong> font by the Braille Institute, SIL Open Font License 1.1, loaded from Google Fonts.</li>
+    <li>Sound is made with the browser’s Web Audio API; voice uses the browser’s built-in speech synthesis (English). No data leaves your device.</li>
+    <li>The NASA Space Apps Challenge logo in the header only identifies the challenge; it does not mean NASA endorses this project.</li>
+  </ul>
+  <p class="hint">Full notices: <code>THIRD_PARTY_NOTICES.md</code> in the project folder.</p>
+  <h3 id="aidisc">AI disclosure</h3>
+  <ul>
+    <li><strong>Claude (Anthropic)</strong>, an AI assistant, helped the team with ideas, with code (including the country detection, the upload reading, the voice and accessibility features) and with drafting the presentation slides. The team chose the project, directed the work, reviewed, tested and is responsible for the result.</li>
+    <!-- TEAM: add every other AI tool the team really used (name, version, what for). Do not leave this comment in the final submission. -->
+    <li>The “AI” inside the web app is a small k-nearest-neighbour classifier that runs in your browser. It learns from the NASA sample frames shipped with the project and only tells you which of the three datasets a picture looks like. It is not a generative model and calls no external AI service.</li>
+    <li>Conclusions shown by the app are generated by fixed rules from the numbers measured in the pictures; they are image-based estimates, not official NASA measurements.</li>
+  </ul>
+  <p class="hint">Created 14 November 2026.</p>
+  <button id="closecredits" type="button">Close</button>
+</dialog>
+<script>if(/advanced/.test(location.hash+location.search)){var a=document.getElementById("aboutsec");if(a)a.hidden=false;}</script>
+<div id="announcer" class="sr" aria-live="polite"></div>
+<dialog id="dlg" aria-labelledby="dh"><h2 id="dh">Keyboard shortcuts</h2>
+<ul><li>Space: play / pause</li><li>← / →: previous / next frame</li><li>↑ / ↓: volume</li><li>E: explore mode (arrows move the cursor, Enter plays the spot)</li><li>Esc: stop</li><li>?: this help</li></ul>
+<button id="closedlg">Close</button></dialog>
+<dialog id="howdlg" aria-labelledby="hh"><h2 id="hh">How the sound works</h2><p id="howtxt"></p><button id="closehow">Close</button></dialog>
+<script src="js/audio-engine.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/geo-meta.js"></script>
+<script src="js/oceans.js"></script>
+<script src="js/geo.js"></script>
+<script src="js/sonify.js"></script>
+<script src="js/datasets.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js"></script>
+<script src="js/frames-embed.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+<script src="js/coil3d.js"></script>
+<script src="js/geoui.js"></script>
+</body>
+</html>

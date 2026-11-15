@@ -1,0 +1,195 @@
+:root{--bg:#f4f7f9;--fg:#0f2230;--card:#fff;--line:#a9bccb;--acc:#0b5cab;--accfg:#fff;--soft:#e4eef6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1620;--fg:#e8f1f6;--card:#112533;--line:#35566b;--acc:#6cc0ff;--accfg:#04121c;--soft:#16303f}}
+:root[data-theme="dark"]{--bg:#0a1620;--fg:#e8f1f6;--card:#112533;--line:#35566b;--acc:#6cc0ff;--accfg:#04121c;--soft:#16303f}
+:root[data-contrast="1"]{--bg:#000;--fg:#fff;--card:#000;--line:#fff;--acc:#ffe600;--accfg:#000;--soft:#111}
+html{scroll-padding-top:env(safe-area-inset-top,0px);font-size:100%}html.big{font-size:125%}
+body{margin:0 auto;background:var(--bg);color:var(--fg);font:1rem/1.65 Georgia,"Times New Roman",serif;max-width:72rem;padding:1rem}
+h1{font:800 2.6rem/1.05 "Trebuchet MS",Verdana,sans-serif;margin:.5rem 0}
+h2{font:700 1.35rem "Trebuchet MS",Verdana,sans-serif;margin:0 0 .75rem;display:flex;align-items:center;gap:.6rem}
+section{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:1.1rem;margin:1.2rem 0}
+.n{display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--acc);color:var(--accfg);font-size:1rem}
+.lead{max-width:40rem;font-size:1.1rem}
+button,select{font:600 1rem "Trebuchet MS",Verdana,sans-serif;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:6px;padding:.6rem 1rem;min-height:44px;cursor:pointer}
+button[aria-pressed="true"],button.on,.primary{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.primary{min-width:7rem;font-size:1.15rem}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+#gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.75rem}
+#gallery button{text-align:left;font-weight:400;padding:1rem;line-height:1.4}
+#gallery strong{display:block;font-family:"Trebuchet MS",Verdana,sans-serif;margin-bottom:.2rem}
+.stage{position:relative}
+canvas{width:100%;height:auto;display:block;border:2px solid var(--line);border-radius:6px;background:#000}
+#marker{position:absolute;top:0;bottom:0;width:3%;background:rgba(255,230,0,.35);border-inline:2px solid #ffe600;pointer-events:none;left:0;z-index:5}
+.controls,.sliders{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0;align-items:center}
+.sliders label{display:flex;gap:.5rem;align-items:center}
+.frame{border-left:4px solid var(--acc);padding-left:.75rem}
+.dsdesc{font-weight:700}.hint{font-size:.95rem;opacity:.85}
+.conclusion{background:var(--soft);border-radius:8px;padding:1rem;font-size:1.1rem;margin:0 0 1rem}
+#chart{display:flex;gap:4px;height:9rem;align-items:flex-end}
+#chart button{flex:1;height:100%;padding:0;border:0;background:transparent;display:flex;align-items:flex-end;min-height:44px}
+#chart span{display:block;width:100%;background:var(--line);border-radius:3px 3px 0 0}
+#chart button.cur span{background:var(--acc)}
+textarea{width:100%;box-sizing:border-box;font:.8rem monospace;background:var(--card);color:var(--fg);border:2px solid var(--line);margin:.5rem 0}
+label{display:block;margin:.5rem 0}.file input{display:block;margin-top:.3rem}
+.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;background:var(--acc);color:var(--accfg);padding:.5rem;z-index:5}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+dialog{background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:8px}
+@media (prefers-reduced-motion:reduce){#marker{display:block}}
+h3{font:700 1.05rem 'Trebuchet MS',Verdana,sans-serif;margin:1.2rem 0 .3rem}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;align-items:flex-start}
+h1 small{display:block;font:600 1rem Georgia,serif;opacity:.8}.tools{display:flex;flex-wrap:wrap;gap:.5rem}
+.tag{display:inline-block;font:700 .72rem "Trebuchet MS",Verdana,sans-serif;letter-spacing:.04em;text-transform:uppercase;background:var(--soft);padding:.2rem .5rem;border-radius:4px;margin-bottom:.4rem}
+.legend{margin-top:.9rem;background:var(--soft);border-radius:8px;padding:.6rem .8rem}
+.chip{display:inline-flex;gap:.4rem;align-items:center;border:2px solid var(--line);border-radius:6px;padding:.25rem .6rem;margin:.15rem;background:var(--card)}
+.chip i{width:.9rem;height:.9rem;border-radius:3px;display:inline-block}
+.split{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem}.card{background:var(--soft);border-radius:8px;padding:1rem;align-self:start}
+@media (max-width:52rem){.split{grid-template-columns:1fr}}
+.views{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.5rem 0}.views[hidden]{display:none}
+#chart{display:flex;gap:.4rem;height:13rem;margin-bottom:.5rem}.yax{display:flex;flex-direction:column;justify-content:space-between;font-size:.7rem;padding-bottom:1.3rem}
+.bars{flex:1;display:flex;gap:3px}#chart button{flex:1;min-width:0;height:100%;padding:0;border:0;background:transparent;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-weight:400}
+#chart button b{font-size:.65rem;height:1.3rem}#chart button span{display:block;width:100%;border-radius:3px 3px 0 0;min-height:3px}#chart button i{font-style:normal;font-size:.62rem;height:1.3rem;overflow:hidden}
+#chart button.cur{outline:2px solid var(--acc)}.stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.5rem 0}.stats div{background:var(--card);border:2px solid var(--line);border-radius:6px;padding:.4rem .6rem}.stats p{margin:.2rem 0;font-weight:700}.note{font-size:.95rem}
+.hearing{font:600 .95rem monospace;background:var(--soft);padding:.5rem .7rem;border-radius:6px;margin:.5rem 0}
+.hzbar{height:.8rem;border-radius:4px;border:2px solid var(--line)}.hzlab{display:flex;justify-content:space-between;gap:.5rem;font-size:.8rem;margin:.2rem 0}
+.hznow{background:var(--card);border:2px solid var(--acc);border-radius:6px;padding:.4rem .6rem;font-weight:700;font-size:.9rem}
+.tblwrap{max-height:16rem;overflow:auto}table{border-collapse:collapse;width:100%;font-size:.85rem}th,td{border-bottom:1px solid var(--line);padding:.3rem .4rem;text-align:left}
+thead th{position:sticky;top:0;background:var(--soft)}tr.cur{background:var(--soft);font-weight:700}.rowbtn{min-height:32px;padding:.2rem .5rem;font-size:.85rem}
+#chart{touch-action:pan-y;cursor:ew-resize}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;background:var(--card);border:2px solid var(--line);border-radius:8px;padding:.6rem;margin-bottom:.6rem}
+.metrics small{display:block;font-size:.62rem;letter-spacing:.05em;opacity:.8}.metrics b{display:block;font-size:1.25rem;color:var(--acc);overflow-wrap:anywhere}.unit{font-size:.65rem;opacity:.8}
+#curve{width:100%;height:170px;border:2px solid var(--line);border-radius:8px;background:var(--card);touch-action:pan-y;cursor:ew-resize;display:block}
+.axis{display:flex;justify-content:space-between;gap:.5rem;font-size:.72rem;margin:.2rem 0 .6rem}.axis span:nth-child(2){text-align:center;opacity:.85}
+.cmp,.mel{margin:.6rem 0}.hz{margin:.6rem 0}@media (max-width:40rem){.metrics{grid-template-columns:repeat(2,1fr)}}
+.adv{margin-top:.8rem}
+
+#prof{width:100%;height:60px;display:block;margin:.4rem 0 0;background:#000;border-radius:6px}
+#coil{width:100%;max-width:900px;display:block;background:#050a14;border-radius:10px;cursor:grab;touch-action:none}#coil:active{cursor:grabbing}
+.upload{margin-top:.9rem;border:2px dashed var(--line);border-radius:10px;padding:.8rem}.upload progress{width:100%}[hidden]{display:none!important}
+
+/* ===== Simple, readable, consistent look (one font for everything, clear contrast) ===== */
+:root{--font:"Atkinson Hyperlegible","Segoe UI",Verdana,Tahoma,Arial,sans-serif}
+*,*::before,*::after{font-family:var(--font)!important}
+html{font-size:112.5%}
+body{line-height:1.6;max-width:70rem}
+h1{font-size:2.4rem}h2{font-size:1.5rem}h3{font-size:1.2rem}
+button,select{min-height:3rem;padding:.55rem 1rem;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer}
+input[type=file]{font-size:1rem}
+input[type=file]::file-selector-button{min-height:3rem;padding:.5rem 1rem;margin-right:.8rem;border-radius:10px;font-size:1rem;font-weight:700;background:var(--acc);color:var(--accfg);border:2px solid var(--acc);cursor:pointer}
+.hint,.unit,.metrics small,.tag,.axis,.hz,.stats small{font-size:.9rem!important;opacity:1!important}
+.metrics b{font-size:1.5rem}
+#gallery button.on,#gallery button.on *{color:var(--accfg)!important}
+#gallery button.on .tag{background:transparent!important;border:1px solid var(--accfg)}
+#gallery button.on::after{content:"✓ Selected";display:block;margin-top:.4rem;font-weight:800}
+#marker{background:rgba(255,230,0,.15)!important;border-right:3px solid #ffe600!important}
+.howto{border:2px solid var(--line);border-radius:12px;padding:.8rem 1.2rem;margin:1rem 0;background:var(--card)}
+.howto ol{margin:0;padding-left:1.4rem;font-size:1.1rem}.howto li{margin:.3rem 0}
+details.more{margin:.8rem 0;border:2px solid var(--line);border-radius:10px;padding:.3rem .9rem}
+details.more>summary{font-weight:700;cursor:pointer;padding:.5rem 0}
+.metrics{grid-template-columns:1fr 1fr!important}.metrics>div{min-width:0}
+
+/* ===== Countries and continents ===== */
+#geoov{position:absolute;left:0;top:0;pointer-events:none;background:transparent;border-color:transparent}
+.geobox{display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:.6rem}
+.geobox input{display:block;width:100%;box-sizing:border-box;min-height:3rem;font-size:1rem;margin-top:.2rem;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:10px;padding:.4rem .6rem}
+.gbars{display:grid;gap:.35rem}.gbar{display:grid;grid-template-columns:9rem 1fr 11rem;gap:.6rem;align-items:center;font-size:.95rem}
+.gt{display:block;height:1.1rem;background:var(--soft);border:2px solid var(--line);border-radius:6px;overflow:hidden}.gt i{display:block;height:100%;background:var(--acc)}
+.gn{text-align:right;font-variant-numeric:tabular-nums}.gn small{opacity:.8}
+#geobody{font-variant-numeric:tabular-nums}#geobody tr.out{font-style:italic;background:var(--soft)}
+#geosec .tblwrap{max-height:28rem}
+@media (max-width:40rem){.gbar{grid-template-columns:6.5rem 1fr 8rem;font-size:.85rem}}
+
+/* Night Lights source frames already contain two matching maps side by side.
+   A narrow scan cursor tracks only the left map; the right map is a visual duplicate. */
+.stage.lights-pair #marker{width:.55%;background:rgba(255,230,0,.10)!important;border-inline:1px solid #ffe600!important;box-shadow:none}
+.stage.lights-pair::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.28);pointer-events:none}
+#marker2{z-index:5;display:none!important}
+@media (prefers-reduced-motion:reduce){#marker{display:none}}
+
+
+/* Editable frame overlay: same responsive coordinate system as the displayed map */
+.frame-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+.analysis-frame{position:absolute;box-sizing:border-box;border:2px solid #ffe600;background:rgba(255,230,0,.035);pointer-events:auto;touch-action:none;cursor:move;min-width:3%;min-height:4%;color:#ffe600;text-shadow:0 1px 3px #000;font-size:.78rem;font-weight:800}
+.analysis-frame.selected{border-color:#00e5ff;background:rgba(0,229,255,.055);box-shadow:0 0 0 1px rgba(0,229,255,.4)}
+.analysis-frame .frame-label{position:absolute;left:3px;top:1px;padding:0 4px;border-radius:3px;background:rgba(0,0,0,.7);color:#fff;line-height:1.4;pointer-events:none}
+.analysis-frame .resize-handle{position:absolute;width:15px;height:15px;min-width:15px;min-height:15px;padding:0;right:-2px;bottom:-2px;border:2px solid #fff;background:#00bcd4;border-radius:2px;cursor:nwse-resize;touch-action:none}
+.frame-tools{margin:.7rem 0 1rem;padding:.8rem;border:2px solid var(--line);border-radius:10px;background:var(--card)}
+.frame-tools-head{display:flex;justify-content:space-between;gap:1rem;align-items:center}
+.frame-tools .hint{margin:.25rem 0;font-size:.9rem!important}
+.frame-tools .controls{margin:.45rem 0}
+.frame-tools select{min-width:8rem}
+.frame-nudge{align-items:center}
+.frame-nudge button{min-width:3rem}
+@media(max-width:40rem){.analysis-frame .resize-handle{width:18px;height:18px}.frame-tools .controls>*{flex:1}}
+
+/* Country-border alignment editor: only visible after Show borders on the image */
+.geo-editor{margin:.7rem 0;padding:.8rem;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.geo-editor[hidden]{display:none!important}
+.geo-editor .controls{display:flex;flex-wrap:wrap;gap:.45rem;margin:.5rem 0}
+.geo-editor button{min-height:2.3rem}
+
+/* Independent border display and edit controls placed with the playback sliders */
+.border-actions{display:flex;flex-wrap:wrap;gap:.55rem;margin:.55rem 0 .35rem;align-items:center}
+.border-actions button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.geo-editor{margin:.45rem 0 .8rem;padding:.7rem .85rem;border:1px solid var(--line);border-radius:9px;background:var(--card)}
+.geo-editor[hidden]{display:none!important}
+.geo-editor .controls{display:flex;flex-wrap:wrap;gap:.45rem;margin:.45rem 0}
+.geo-editor .hint{margin:.25rem 0}
+
+/* Keep both independent border controls visible in every mode. */
+.border-actions{display:flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:flex-start}
+.border-actions #georim,.border-actions #geoedit{display:inline-flex!important;visibility:visible!important;opacity:1!important;position:relative}
+.geo-handles{position:absolute;inset:0;z-index:8;pointer-events:none}
+.geo-handles[hidden]{display:none!important}
+.geo-handles button{position:absolute;display:block!important;pointer-events:auto;width:16px;height:16px;min-width:16px;min-height:16px;padding:0;border:2px solid #fff;border-radius:50%;background:#00d5ff;box-shadow:0 0 0 2px #064e65;transform:translate(-50%,-50%);touch-action:none;z-index:9}
+.geo-handles button[data-edge="nw"]{left:0;top:0;cursor:nwse-resize}
+.geo-handles button[data-edge="n"]{left:50%;top:0;cursor:ns-resize}
+.geo-handles button[data-edge="ne"]{left:100%;top:0;cursor:nesw-resize}
+.geo-handles button[data-edge="e"]{left:100%;top:50%;cursor:ew-resize}
+.geo-handles button[data-edge="se"]{left:100%;top:100%;cursor:nwse-resize}
+.geo-handles button[data-edge="s"]{left:50%;top:100%;cursor:ns-resize}
+.geo-handles button[data-edge="sw"]{left:0;top:100%;cursor:nesw-resize}
+.geo-handles button[data-edge="w"]{left:0;top:50%;cursor:ew-resize}
+.geo-editor .hint{font-size:.92rem}
+
+/* Border toggles stay visible while active; active state is blue like the other primary controls. */
+#borderActions{display:flex!important;visibility:visible!important;opacity:1!important;flex-wrap:wrap;gap:.55rem;align-items:center;margin:.55rem 0 .35rem}
+#borderActions[hidden]{display:none!important}
+#borderActions .border-toggle{display:inline-flex!important;visibility:visible!important;opacity:1!important}
+#borderActions .border-toggle[aria-pressed="true"],
+#borderActions .border-toggle.on{background:#0b5eaa!important;color:#fff!important;border-color:#0b5eaa!important}
+#borderActions .border-toggle[aria-pressed="false"]{background:var(--card);color:var(--fg)}
+#geoeditor[hidden]{display:none!important}
+
+/* Night Lights: geographic overlay occupies exactly the displayed map canvas.
+   Clip it to the stage so it cannot cover the profile, hearing strip or player. */
+.stage{position:relative;overflow:hidden;isolation:isolate}
+.stage> #cv{position:relative;z-index:1;display:block;width:100%;height:auto}
+.stage> #geoov{position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;
+  width:100%!important;height:100%!important;max-width:100%;margin:0!important;padding:0!important;
+  border:0!important;box-sizing:border-box;display:block;z-index:2;pointer-events:none;background:transparent}
+.stage> .geo-handles{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.stage> .geo-handles[hidden]{display:none!important}
+
+/* V12: use the available desktop viewport for the visualization and avoid grid overflow. */
+body{width:100%;max-width:1600px;box-sizing:border-box;margin:0 auto;padding:clamp(.5rem,1.2vw,1rem)}
+.split{grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);min-width:0}
+.split>*{min-width:0}
+.stage{width:100%;min-width:0}
+.stage>#cv{width:100%;max-width:100%;height:auto}
+@media(max-width:64rem){.split{grid-template-columns:minmax(0,1fr)}}
+
+/* border-frame chips in the border editor */
+#geoframes{display:flex;flex-wrap:wrap;gap:.45rem}
+#geoframes .frame-chip{padding:.35rem .8rem}
+#geoframes .frame-chip.on,#geoframes .frame-chip[aria-pressed="true"]{background:#0b5eaa!important;color:#fff!important;border-color:#0b5eaa!important}
+#geodelframe:disabled{opacity:.5;cursor:not-allowed}
+
+/* V14: NASA Space Apps Challenge logo in the header. White badge so the black logo stays readable in every theme. */
+.brand{display:flex;align-items:center;gap:1rem;min-width:0}
+.brandlogo{flex:none;width:96px;height:96px;object-fit:contain;background:#fff;border-radius:14px;padding:6px;box-sizing:border-box}
+@media(max-width:40rem){.brandlogo{width:72px;height:72px}}
+
+/* credits and AI disclosure */
+dialog.credits{max-width:min(900px,94vw);max-height:88vh;overflow:auto;padding:20px 22px;border:2px solid currentColor;border-radius:12px;background:var(--bg,#f4f7fa);color:inherit}
+dialog.credits::backdrop{background:rgba(0,0,0,.6)}
+.credits h2{margin-top:0}.credits h3{margin:18px 0 6px}.credits li{margin:6px 0;line-height:1.5}
+.credits a{color:inherit;text-decoration:underline}
