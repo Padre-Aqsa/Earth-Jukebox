@@ -54,11 +54,11 @@ Sounds are synthesized in the browser with the Web Audio API; no audio files or 
 
 | Tool | Version | What it was used for |
 |---|---|---|
-| Claude (Anthropic), used in the claude.ai chat | Claude Sonnet 5.5 | Ideas, code (country detection, upload reading, live video analysis, voice and accessibility features, tests), documentation and the draft of the presentation slides |
+| Claude (Anthropic), used in the claude.ai chat | Claude Sonnet 5.5 | Ideas, code (country detection, upload reading, live video analysis, voice and accessibility features, tests) |
 
 The team chose the project, directed the work, reviewed and tested it and is responsible for the result.
 - The "AI" inside the web app is a small k-nearest-neighbour classifier trained in the browser on the NASA sample frames. It is not a generative model and calls no external service.
-- The same disclosure appears in the app (button "Credits & AI disclosure" at the top of the page), on the Project Page (`docs/PROJECT_PAGE.md`) and on the last slide (slide 7).
+- The same disclosure appears in the app (button "Credits & AI disclosure" at the top of the page), on the Project Page (`docs/PROJECT_PAGE.md`).
 
 ## Other people's work
 No code or concept from other participants' repositories is used.
